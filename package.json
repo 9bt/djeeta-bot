@@ -12,6 +12,9 @@
     "build": "tsc -p tsconfig.json && tsc-alias -p tsconfig.json",
     "heroku-postbuild": "yarn run build"
   },
+  "engines": {
+    "node": "16.x"
+  },
   "dependencies": {
     "discord.js": "^13.3.1",
     "dotenv": "^10.0.0"
