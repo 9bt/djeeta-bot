@@ -17,7 +17,7 @@ dev-env:
 	cat .env.development >> .env
 
 serve: dev-env
-	$(HEROKU) local -f Procfile-dev web
+	$(HEROKU) local -f Procfile-dev bot
 
 deploy:
 	$(GIT) push heroku main
