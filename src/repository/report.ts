@@ -14,11 +14,11 @@ export interface Report {
 }
 
 export async function createGoldBrickReport(id: string, name: string, dateSerial: number): Promise<void> {
-  await createRecord(GOLD_BRICK_SHEET_RANGE, [id, name, dateSerial]);
+  await createRecord(process.env.AGGREGATE_SPREADSHEET_ID, GOLD_BRICK_SHEET_RANGE, [id, name, dateSerial]);
 }
 
 export async function findGoldBrickReportsInYear(year: number): Promise<Report[]> {
-  const reports = await listRecords(GOLD_BRICK_SHEET_RANGE);
+  const reports = await listRecords(process.env.AGGREGATE_SPREADSHEET_ID, GOLD_BRICK_SHEET_RANGE);
 
   const [start, end] = getDateStrRange(year, 0);
   const dateCondtionQuery = `DATE(date) >= DATE("${start}") AND DATE(date) <= DATE("${end}")`;
@@ -35,7 +35,7 @@ export async function findGoldBrickReportsInYear(year: number): Promise<Report[]
 }
 
 export async function findGoldBrickReportsInMonth(year: number, month: number): Promise<Report[]> {
-  const reports = await listRecords(GOLD_BRICK_SHEET_RANGE);
+  const reports = await listRecords(process.env.AGGREGATE_SPREADSHEET_ID, GOLD_BRICK_SHEET_RANGE);
 
   const [start, end] = getDateStrRange(year, month);
   const dateCondtionQuery = `DATE(date) >= DATE("${start}") AND DATE(date) <= DATE("${end}")`;
@@ -52,7 +52,7 @@ export async function findGoldBrickReportsInMonth(year: number, month: number): 
 }
 
 export async function findGoldBrickReportsInMonthByDay(year: number, month: number): Promise<Report[]> {
-  const reports = await listRecords(GOLD_BRICK_SHEET_RANGE);
+  const reports = await listRecords(process.env.AGGREGATE_SPREADSHEET_ID, GOLD_BRICK_SHEET_RANGE);
 
   const [start, end] = getDateStrRange(year, month);
   const dateCondtionQuery = `DATE(date) >= DATE("${start}") AND DATE(date) <= DATE("${end}")`;
@@ -69,7 +69,7 @@ export async function findGoldBrickReportsInMonthByDay(year: number, month: numb
 }
 
 export async function findGoldBrickReportsInYearAsName(year: number, name: string): Promise<Report[]> {
-  const reports = await listRecords(GOLD_BRICK_SHEET_RANGE);
+  const reports = await listRecords(process.env.AGGREGATE_SPREADSHEET_ID, GOLD_BRICK_SHEET_RANGE);
 
   const [start, end] = getDateStrRange(year, 0);
   const dateCondtionQuery = `DATE(date) >= DATE("${start}") AND DATE(date) <= DATE("${end}")`;
@@ -86,7 +86,7 @@ export async function findGoldBrickReportsInYearAsName(year: number, name: strin
 }
 
 export async function findGoldBrickReportsInMonthAsName(year: number, month: number, name: string): Promise<Report[]> {
-  const reports = await listRecords(GOLD_BRICK_SHEET_RANGE);
+  const reports = await listRecords(process.env.AGGREGATE_SPREADSHEET_ID, GOLD_BRICK_SHEET_RANGE);
 
   const [start, end] = getDateStrRange(year, month);
   const dateCondtionQuery = `DATE(date) >= DATE("${start}") AND DATE(date) <= DATE("${end}")`;
@@ -103,7 +103,7 @@ export async function findGoldBrickReportsInMonthAsName(year: number, month: num
 }
 
 export async function findGoldBrickReportsByDateAndName(date: Date, name: string): Promise<Report[]> {
-  const reports = await listRecords(GOLD_BRICK_SHEET_RANGE);
+  const reports = await listRecords(process.env.AGGREGATE_SPREADSHEET_ID, GOLD_BRICK_SHEET_RANGE);
 
   const dateStr = formatDate(date);
   const dateCondtionQuery = `DATE(date) >= DATE("${dateStr} 00:00:00") AND DATE(date) <= DATE("${dateStr} 23:59:59")`;

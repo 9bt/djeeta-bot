@@ -10,7 +10,7 @@ export type Record = {
 
 const HEADER_COUNT = 1;
 
-async function getSheetId(range: string): Promise<number | undefined> {
+async function getSheetId(spreadsheetId: string | undefined, range: string): Promise<number | undefined> {
   if (range === '') {
     return;
   }
@@ -19,7 +19,7 @@ async function getSheetId(range: string): Promise<number | undefined> {
   const sheets = google.sheets({ version: 'v4', auth: client });
   const response = await sheets.spreadsheets.get({
     auth: client,
-    spreadsheetId: process.env.SPREADSHEET_ID,
+    spreadsheetId,
   });
   const sheetIds = (response.data?.sheets ?? [])
     .filter((sheet: Schema$Sheet): boolean => sheet.properties?.title === range)
@@ -28,11 +28,11 @@ async function getSheetId(range: string): Promise<number | undefined> {
   return sheetIds[0];
 }
 
-export async function createRecord(range: string, row: any[]) {
+export async function createRecord(spreadsheetId: string | undefined, range: string, row: any[]) {
   const client = await getGoogleClient();
   const sheets = google.sheets({ version: 'v4', auth: client });
   await sheets.spreadsheets.values.append({
-    spreadsheetId: process.env.SPREADSHEET_ID,
+    spreadsheetId,
     range,
     valueInputOption: 'RAW',
     requestBody: {
@@ -43,19 +43,19 @@ export async function createRecord(range: string, row: any[]) {
   });
 }
 
-export async function listRecords(range: string): Promise<Record[]> {
+export async function listRecords(spreadsheetId: string | undefined, range: string): Promise<Record[]> {
   const client = await getGoogleClient();
   const sheets = google.sheets({ version: 'v4', auth: client });
 
   const response = await sheets.spreadsheets.values.get({
-    spreadsheetId: process.env.SPREADSHEET_ID,
+    spreadsheetId,
     range,
   });
 
   return normalizeSheetValue(response.data.values ?? []);
 }
 
-export async function deleteRecords(ids: string[], range: string): Promise<void> {
+export async function deleteRecords(spreadsheetId: string | undefined, ids: string[], range: string): Promise<void> {
   if (ids.length === 0) {
     return;
   }
@@ -64,11 +64,11 @@ export async function deleteRecords(ids: string[], range: string): Promise<void>
   const sheets = google.sheets({ version: 'v4', auth: client });
 
   const response = await sheets.spreadsheets.values.get({
-    spreadsheetId: process.env.SPREADSHEET_ID,
+    spreadsheetId,
     range,
   });
 
-  const sheetId = await getSheetId(range);
+  const sheetId = await getSheetId(spreadsheetId, range);
 
   const values = normalizeSheetValue(response.data.values ?? []);
 
@@ -94,7 +94,7 @@ export async function deleteRecords(ids: string[], range: string): Promise<void>
 
   await sheets.spreadsheets.batchUpdate({
     auth: client,
-    spreadsheetId: process.env.SPREADSHEET_ID,
+    spreadsheetId,
     requestBody: {
       requests,
     },
