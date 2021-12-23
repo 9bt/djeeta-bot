@@ -11,6 +11,7 @@ import {
   findGoldBrickReportsInYearAsName,
   findGoldBrickReportsInMonthAsName,
 } from '@/repository/report';
+import { listMembers } from '@/repository/member';
 
 export async function reportGoldBrick(message: Message): Promise<void> {
   if (!isReportChannel(message)) {
@@ -27,10 +28,17 @@ export async function reportGoldBrick(message: Message): Promise<void> {
   const offset = 9 * 60 * 60 * 1000;
   const dateSerial = (now.getTime() + offset) / 86400000 + 25569;
 
-  await createGoldBrickReport(id, message.author.username, dateSerial);
+  const members = await listMembers();
+  const member = members.find((member) => member.discordNickname === message.author.username);
+  if (!member) {
+    sendMessage(`無効な Discord ニックネームです。名前: ${message.author.username}`, message.channelId);
+    return;
+  }
+
+  await createGoldBrickReport(id, member.name, dateSerial);
 
   sendMessage('カウントしました', message.channelId);
-  sendMessage(`${message.author.username} さんが脱法しました`, process.env.DISCORD_GENERAL_CHANNEL_ID);
+  sendMessage(`${member.name} さんが脱法しました`, process.env.DISCORD_GENERAL_CHANNEL_ID);
 }
 
 export async function aggregateGoldBrickReports(message: Message): Promise<void> {
