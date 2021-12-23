@@ -16,10 +16,17 @@
     "node": "16.x"
   },
   "dependencies": {
+    "alasql": "^1.7.3",
+    "date-fns": "^2.27.0",
     "discord.js": "^13.3.1",
-    "dotenv": "^10.0.0"
+    "dotenv": "^10.0.0",
+    "express": "^4.17.2",
+    "googleapis": "^92.0.0",
+    "sonyflake": "^1.0.1"
   },
   "devDependencies": {
+    "@types/express": "^4.17.13",
+    "google-auth-library": "^7.10.3",
     "ts-node-dev": "^1.1.8",
     "tsc-alias": "^1.4.2",
     "tsconfig-paths": "^3.12.0",

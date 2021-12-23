@@ -1,3 +1,5 @@
+import express from 'express';
+
 import { getClient } from '@/discord';
 import { messageHandler } from '@/handler';
 
@@ -17,3 +19,16 @@ client.on('ready', () => {
 });
 
 client.on('messageCreate', messageHandler);
+
+const app = express();
+app.get('/', (req, res) => {
+  res.send('Welcome to djeeta-app!');
+});
+
+app.get('/', (req, res) => {
+  res.send('Welcome to djeeta-app!');
+});
+
+app.listen(process.env.PORT, () => {
+  console.log(`Listening on port ${process.env.PORT}!`);
+});
