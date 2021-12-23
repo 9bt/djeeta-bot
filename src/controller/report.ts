@@ -5,11 +5,13 @@ import { isReportChannel, sendMessage, sendMessageEmbed } from '@/service/discor
 import {
   Report,
   createGoldBrickReport,
+  deleteGoldBrickReport,
   findGoldBrickReportsInYear,
   findGoldBrickReportsInMonth,
   findGoldBrickReportsInMonthByDay,
   findGoldBrickReportsInYearAsName,
   findGoldBrickReportsInMonthAsName,
+  findRecentGoldBrickReportByName,
 } from '@/repository/report';
 import { listMembers } from '@/repository/member';
 
@@ -41,16 +43,39 @@ export async function reportGoldBrick(message: Message): Promise<void> {
   sendMessage(`${member.name} さんが脱法しました`, process.env.DISCORD_GENERAL_CHANNEL_ID);
 }
 
+export async function removeRecentGoldBrickReport(message: Message): Promise<void> {
+  if (!message.content.startsWith('/ヒヒイロカネ 削除')) {
+    return;
+  }
+
+  const members = await listMembers();
+  const member = members.find((member) => member.discordNickname === message.author.username);
+  if (!member) {
+    sendMessage(`無効な Discord ニックネームです。名前: ${message.author.username}`, message.channelId);
+    return;
+  }
+
+  const report = await findRecentGoldBrickReportByName(member.name);
+  if (!report || !report.id) {
+    sendMessage('削除するカウントが見つかりません', message.channelId);
+    return;
+  }
+
+  await deleteGoldBrickReport(report.id);
+
+  sendMessage(`${member.name} さんの直近のカウントを削除しました`, message.channelId);
+}
+
 export async function aggregateGoldBrickReports(message: Message): Promise<void> {
   if (isReportChannel(message)) {
     return;
   }
 
-  if (!message.content.startsWith('/ヒヒイロカネ')) {
+  if (!message.content.startsWith('/ヒヒイロカネ 集計')) {
     return;
   }
 
-  const [, dateCondition, name] = message.content.split(' ');
+  const [, , dateCondition, name] = message.content.split(' ');
 
   const now = new Date();
 
