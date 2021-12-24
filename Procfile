@@ -1,1 +1,1 @@
-bot: yarn run start
+web: yarn run start
