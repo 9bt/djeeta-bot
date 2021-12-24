@@ -93,7 +93,7 @@ export async function aggregateGoldBrickReports(message: Message): Promise<void>
     year = now.getFullYear();
   }
 
-  let matches = dateCondition.match(/(?:(\d{4})年)?(?:(\d{1,2})月)?/);
+  const matches = dateCondition.match(/(?:(\d{4})年)?(?:(\d{1,2})月)?/);
   if (matches) {
     const [, yearStr, monthStr] = matches;
     year = yearStr ? parseInt(yearStr, 10) : now.getFullYear();
