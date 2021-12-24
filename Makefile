@@ -16,7 +16,7 @@ dev-env:
 	$(HEROKU) config -s > .env
 	cat .env.development >> .env
 
-serve: dev-env
+serve: deps dev-env
 	$(HEROKU) local -f Procfile-dev web
 
 deploy:
