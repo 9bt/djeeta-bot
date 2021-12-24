@@ -20,10 +20,11 @@ serve: dev-env
 	$(HEROKU) local -f Procfile-dev web
 
 deploy:
+	$(HEROKU) config:set DEPLOYMENT_ID=$(shell git log -n 1 --pretty=format:"%H")
 	$(GIT) push heroku main
 
 dev-send-message-in-a-month:
-	curl -X POST -H "Content-Type: application/json" -d '{ "type": "in-a-month" }' 'http://localhost:5000/notifications'
+	curl -X POST -H "Content-Type: application/json" -H "x-heroku-deployment-id: ${DEPLOYMENT_ID}" -d '{ "type": "in-a-month" }' 'http://localhost:5000/notifications'
 
 prod-send-message-in-a-month:
-	curl -X POST -H "Content-Type: application/json" -H "x-heroku-dyno: ${DYNO}" -d '{ "type": "in-a-month" }' 'https://djeeta-app.herokuapp.com/notifications'
+	curl -X POST -H "Content-Type: application/json" -H "x-heroku-deployment-id: ${DEPLOYMENT_ID}" -d '{ "type": "in-a-month" }' 'https://djeeta-app.herokuapp.com/notifications'
