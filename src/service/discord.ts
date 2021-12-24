@@ -23,7 +23,7 @@ function getChannel(channelId: string): TextChannel | undefined {
   return channel as TextChannel;
 }
 
-export function sendMessage(messageText: string, channelId: string = ''): void {
+export function sendMessage(messageText: string, channelId = ''): void {
   if (channelId === '') {
     return;
   }
@@ -36,7 +36,7 @@ export function sendMessage(messageText: string, channelId: string = ''): void {
   channel.send(messageText);
 }
 
-export function sendMessageEmbed(messageEmbed: MessageEmbed, channelId: string = ''): void {
+export function sendMessageEmbed(messageEmbed: MessageEmbed, channelId = ''): void {
   if (channelId === '') {
     return;
   }

@@ -1,4 +1,4 @@
-import express, { Request, Response, NextFunction }  from 'express';
+import express, { Request, Response, NextFunction } from 'express';
 
 import { getClient } from '@/discord';
 import { messageHandler } from '@/handler';
@@ -23,7 +23,7 @@ client.on('ready', () => {
 client.on('messageCreate', messageHandler);
 
 const app = express();
-app.use(express.json())
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(herokuMiddleware);
 app.use(async (req: Request, res: Response, next: NextFunction) => {
@@ -33,7 +33,7 @@ app.use(async (req: Request, res: Response, next: NextFunction) => {
     console.error(err);
     res.status((err as any).statusCode || 500).send((err as any).message);
   }
-})
+});
 app.use('/', router);
 
 app.listen(process.env.PORT, () => {

@@ -6,7 +6,7 @@ let client: JWT | null = null;
 async function initializeClient(): Promise<JWT> {
   return new Promise((resolve, reject) => {
     const clientEmail = process.env.GOOGLE_SERVICE_ACCOUNT_CLIENT_EMAIL ?? '';
-    const privateKey = (process.env.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY ?? '').replace(/\\n/g, '\n').replace(/\\/g, '');;
+    const privateKey = (process.env.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY ?? '').replace(/\\n/g, '\n').replace(/\\/g, '');
     const scopes = ['https://www.googleapis.com/auth/spreadsheets'];
 
     if (!clientEmail || !privateKey) {
