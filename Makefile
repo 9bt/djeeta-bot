@@ -19,6 +19,12 @@ dev-env:
 serve: deps dev-env
 	$(HEROKU) local -f Procfile-dev web
 
+lint: deps
+	$(YARN) run lint
+
+prettify: deps
+	$(YARN) run prettify
+
 deploy:
 	$(HEROKU) config:set DEPLOYMENT_ID=$(shell git log -n 1 --pretty=format:"%H")
 	$(GIT) push heroku main
