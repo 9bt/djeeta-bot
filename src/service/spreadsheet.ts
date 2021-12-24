@@ -55,7 +55,7 @@ export async function listRecords(spreadsheetId: string | undefined, range: stri
   return normalizeSheetValue(response.data.values ?? []);
 }
 
-export async function deleteRecords(spreadsheetId: string | undefined, ids: string[], range: string): Promise<void> {
+export async function deleteRecords(spreadsheetId: string | undefined, range: string, ids: string[]): Promise<void> {
   if (ids.length === 0) {
     return;
   }

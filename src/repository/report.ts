@@ -1,11 +1,12 @@
 import alasql from 'alasql';
 
-import { createRecord, listRecords } from '@/service/spreadsheet';
+import { createRecord, listRecords, deleteRecords } from '@/service/spreadsheet';
 import { formatDate, getDateStrRange } from '@/service/date';
 
 const GOLD_BRICK_SHEET_RANGE = 'gold_brick';
 
 export interface Report {
+  id?: string;
   num: number;
   name?: string;
   year?: number;
@@ -15,6 +16,10 @@ export interface Report {
 
 export async function createGoldBrickReport(id: string, name: string, dateSerial: number): Promise<void> {
   await createRecord(process.env.AGGREGATE_SPREADSHEET_ID, GOLD_BRICK_SHEET_RANGE, [id, name, dateSerial]);
+}
+
+export async function deleteGoldBrickReport(id: string): Promise<void> {
+  await deleteRecords(process.env.AGGREGATE_SPREADSHEET_ID, GOLD_BRICK_SHEET_RANGE, [id]);
 }
 
 export async function findGoldBrickReportsInYear(year: number): Promise<Report[]> {
@@ -110,4 +115,13 @@ export async function findGoldBrickReportsByDateAndName(date: Date, name: string
   const query = `SELECT * FROM ? WHERE name = "${name}" AND ${dateCondtionQuery}`;
 
   return alasql(query, [reports]) as Report[];
+}
+
+export async function findRecentGoldBrickReportByName(name: string): Promise<Report | undefined> {
+  const reports = await listRecords(process.env.AGGREGATE_SPREADSHEET_ID, GOLD_BRICK_SHEET_RANGE);
+
+  const query = `SELECT * FROM ? WHERE name = "${name}" ORDER BY date DESC`;
+  const results = alasql(query, [reports]) as Report[];
+
+  return results[0];
 }
