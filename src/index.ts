@@ -3,6 +3,7 @@ import express, { Request, Response, NextFunction }  from 'express';
 import { getClient } from '@/discord';
 import { messageHandler } from '@/handler';
 import router from '@/router';
+import { herokuMiddleware } from '@/middleware';
 
 const envFile = process.env.ENV_FILE || '.env';
 require('dotenv').config({
@@ -24,6 +25,7 @@ client.on('messageCreate', messageHandler);
 const app = express();
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
+app.use(herokuMiddleware);
 app.use(async (req: Request, res: Response, next: NextFunction) => {
   try {
     await next();

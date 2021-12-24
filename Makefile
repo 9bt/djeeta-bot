@@ -23,7 +23,7 @@ deploy:
 	$(GIT) push heroku main
 
 dev-send-message-in-a-month:
-	curl -X POST -H 'Content-Type: application/json' -d '{ "type": "in-a-month" }' 'http://localhost:5000/notifications/'
+	curl -X POST -H "Content-Type: application/json" -d '{ "type": "in-a-month" }' 'http://localhost:5000/notifications'
 
 prod-send-message-in-a-month:
-	curl -X POST -H 'Content-Type: application/json' -d '{ "type": "in-a-month" }' 'https://djeeta-app.herokuapp.com/notifications/'
+	curl -X POST -H "Content-Type: application/json" -H "x-heroku-dyno: ${DYNO}" -d '{ "type": "in-a-month" }' 'https://djeeta-app.herokuapp.com/notifications'
