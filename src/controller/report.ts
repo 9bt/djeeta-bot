@@ -79,7 +79,8 @@ export async function aggregateGoldBrickReports(message: Message): Promise<void>
 
   const now = new Date();
 
-  let year = 0, month = 0;
+  let year = 0,
+    month = 0;
   if (dateCondition === '今月') {
     year = now.getFullYear();
     month = now.getMonth() + 1;
@@ -188,6 +189,7 @@ export async function aggregateLawMasayoViolators(message: Message): Promise<voi
   const reports = await findGoldBrickReportsInMonth(year, month);
   const violators = reports.filter((report) => report.num >= 4).map((report) => `${report.name}さん(${report.num}個)`);
 
-  const messageText = violators.length > 0 ? `今月のまさよ法違反は ${violators.join(', ')} です！` : '今月のまさよ法違反はいません！';
+  const messageText =
+    violators.length > 0 ? `今月のまさよ法違反は ${violators.join(', ')} です！` : '今月のまさよ法違反はいません！';
   sendMessage(messageText, message.channelId);
 }

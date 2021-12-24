@@ -36,9 +36,7 @@ export async function createRecord(spreadsheetId: string | undefined, range: str
     range,
     valueInputOption: 'RAW',
     requestBody: {
-      values: [
-        row,
-      ],
+      values: [row],
     },
   });
 }
