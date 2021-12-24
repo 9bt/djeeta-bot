@@ -136,7 +136,9 @@ export async function aggregateGoldBrickReports(message: Message): Promise<void>
         dayMap.set(report.day, []);
       }
 
-      dayMap.get(report.day).push(report.num > 1 ? `×${report.num}` : '');
+      let text = report.name;
+      text += report.num > 1 ? `×${report.num}` : '';
+      dayMap.get(report.day).push(text);
     });
     dayMap.forEach((texts, day) => {
       body += `${`${day}`.padStart(2, ' ')}日: ${texts.join(', ')}\n`;
