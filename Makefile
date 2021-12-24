@@ -29,6 +29,12 @@ deploy:
 	$(HEROKU) config:set DEPLOYMENT_ID=$(shell git log -n 1 --pretty=format:"%H")
 	$(GIT) push heroku main
 
+dev-prevent-from-sleeping-instance:
+	curl -X POST -H "x-heroku-deployment-id: ${DEPLOYMENT_ID}" 'http://localhost:5000'
+
+prod-prevent-from-sleeping-instance:
+	curl -X POST -H "x-heroku-deployment-id: ${DEPLOYMENT_ID}" 'https://djeeta-app.herokuapp.com'
+
 dev-send-message-in-a-month:
 	curl -X POST -H "Content-Type: application/json" -H "x-heroku-deployment-id: ${DEPLOYMENT_ID}" -d '{ "type": "in-a-month" }' 'http://localhost:5000/notifications'
 
