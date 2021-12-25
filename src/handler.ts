@@ -3,6 +3,7 @@ import { Message } from 'discord.js';
 import { isValidGuild, sendMessage } from '@/service/discord';
 import {
   reportGoldBrick,
+  reportGoldBrickByName,
   aggregateGoldBrickReports,
   removeRecentGoldBrickReport,
   aggregateLawMasayoViolators,
@@ -15,6 +16,7 @@ export async function messageHandler(message: Message<boolean>) {
     }
 
     await reportGoldBrick(message);
+    await reportGoldBrickByName(message);
     await aggregateGoldBrickReports(message);
     await aggregateLawMasayoViolators(message);
     await removeRecentGoldBrickReport(message);

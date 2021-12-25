@@ -39,7 +39,37 @@ export async function reportGoldBrick(message: Message): Promise<void> {
 
   await createGoldBrickReport(id, member.name, dateSerial);
 
-  sendMessage('カウントしました', message.channelId);
+  sendMessage('脱法をカウントしました', message.channelId);
+  sendMessage(`${member.name} さんが脱法しました`, process.env.DISCORD_GENERAL_CHANNEL_ID);
+}
+
+export async function reportGoldBrickByName(message: Message): Promise<void> {
+  if (!isReportChannel(message)) {
+    return;
+  }
+
+  if (!message.content.startsWith('/ヒヒイロカネ 追加')) {
+    return;
+  }
+
+  const [, , name] = message.content.split(' ');
+
+  const members = await listMembers();
+  const member = members.find((member) => member.name === name);
+  if (!member) {
+    sendMessage(`無効な名前です。名前: ${name}`, message.channelId);
+    return;
+  }
+
+  const id = generateNewId();
+
+  const now = new Date();
+  const offset = 9 * 60 * 60 * 1000;
+  const dateSerial = (now.getTime() + offset) / 86400000 + 25569;
+
+  await createGoldBrickReport(id, name, dateSerial);
+
+  sendMessage(`${name} として脱法をカウントしました`, message.channelId);
   sendMessage(`${member.name} さんが脱法しました`, process.env.DISCORD_GENERAL_CHANNEL_ID);
 }
 
