@@ -1,9 +1,9 @@
-import { Message, MessageEmbed, TextChannel } from 'discord.js';
+import { Message, Interaction, MessageEmbed, TextChannel, MessageActionRow, MessageButton } from 'discord.js';
 
 import { getClient } from '@/discord';
 
-export function isValidGuild(message: Message): boolean {
-  return message.guildId === process.env.DISCORD_GUILD_ID;
+export function isValidGuild(messageOrInteraction: Message | Interaction): boolean {
+  return messageOrInteraction.guildId === process.env.DISCORD_GUILD_ID;
 }
 
 export function isGeneralChannel(message: Message): boolean {
@@ -46,5 +46,22 @@ export function sendMessageEmbed(messageEmbed: MessageEmbed, channelId = ''): vo
     return;
   }
 
-  channel.send({ embeds: [messageEmbed] });
+  channel.send({
+    embeds: [messageEmbed],
+    components: [
+      new MessageActionRow().addComponents(
+        new MessageButton({
+          label: 'enabled',
+          customId: 'enabled-button',
+          style: 'PRIMARY',
+        }),
+        new MessageButton({
+          label: 'disabled',
+          customId: 'disabled-button',
+          style: 'SECONDARY',
+          disabled: true,
+        })
+      ),
+    ],
+  });
 }
