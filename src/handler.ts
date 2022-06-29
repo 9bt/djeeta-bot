@@ -1,4 +1,4 @@
-import { Message } from 'discord.js';
+import { Message, Interaction } from 'discord.js';
 
 import { isValidGuild, sendMessage } from '@/service/discord';
 import {
@@ -9,7 +9,7 @@ import {
   aggregateLawMasayoViolators,
 } from '@/controller/report';
 
-export async function messageHandler(message: Message<boolean>) {
+export async function onMessage(message: Message<boolean>) {
   try {
     if (!isValidGuild(message)) {
       return;
@@ -22,6 +22,24 @@ export async function messageHandler(message: Message<boolean>) {
     await removeRecentGoldBrickReport(message);
   } catch (e) {
     sendMessage('処理に失敗しました', message.channelId);
+    console.error(e);
+  }
+}
+
+export async function onInteraction(interaction: Interaction) {
+  try {
+    if (!isValidGuild(interaction)) {
+      return;
+    }
+
+    if (interaction.isButton()) {
+      console.log(interaction);
+      await interaction.reply({
+        content: 'Pong!',
+      });
+      return;
+    }
+  } catch (e) {
     console.error(e);
   }
 }

@@ -1,9 +1,10 @@
 import express, { Request, Response, NextFunction } from 'express';
 
 import { getClient } from '@/discord';
-import { messageHandler } from '@/handler';
+import { onMessage, onInteraction } from '@/handler';
 import router from '@/router';
 import { herokuMiddleware } from '@/middleware';
+import { DiscordAPIError } from 'discord.js';
 
 const envFile = process.env.ENV_FILE || '.env';
 require('dotenv').config({
@@ -20,7 +21,9 @@ client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
 });
 
-client.on('messageCreate', messageHandler);
+client.on('messageCreate', onMessage);
+
+client.on('interactionCreate', onInteraction);
 
 const app = express();
 app.use(express.json());
